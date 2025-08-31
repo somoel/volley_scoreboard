@@ -6,8 +6,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await SupabaseConfig.init();
-  final response = await SupabaseConfig.client.from('teams').select();
-  print(response);
   runApp(const MyApp());
 }
 
