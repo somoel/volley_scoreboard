@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:volley_scoreboard/supabase_client.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  await SupabaseConfig.init();
+  final response = await SupabaseConfig.client.from('teams').select();
+  print(response);
   runApp(const MyApp());
 }
 
