@@ -50,6 +50,58 @@ class _MatchesScreenState extends State<MatchesScreen> {
                     'Partido el ${DateUtilsES.fullDate.format(match.date)}'
                 ),
                 subtitle: Text(match.location ?? 'Ubicación desconocida'),
+                trailing: PopupMenuButton<String>(
+                  onSelected: (value) async {
+                    if (value == 'edit') {
+                      final updated = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddMatchScreen(
+                            matchId: match.id,
+                            initialDate: match.date,
+                            initialLocation: match.location,
+                          ),
+                        ),
+                      );
+                      if (updated ?? false) {
+                        setState(() {
+                          matchesFuture = service.fetchMatches();
+                        });
+                      }
+                    } else if (value == 'delete') {
+                      final confirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text('Eliminar partido'),
+                          content: const Text(
+                              '¿Estás seguro de que quieres '
+                                  'eliminar este partido?'
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: const Text('Eliminar'),
+                            ),
+                          ],
+                        )
+                      );
+                      if (confirmed ?? false) {
+                        await service.deleteMatch(match.id);
+                        setState(() {
+                          matchesFuture = service.fetchMatches();
+                        });
+                      }
+                    }
+                  },
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(value: 'edit', child: Text('Editar')),
+                    PopupMenuItem(value: 'delete', child: Text('Eliminar')),
+                  ],
+                ),
               );
             },
           );

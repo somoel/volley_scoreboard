@@ -19,4 +19,19 @@ class MatchService {
       'location': location,
     });
   }
+
+  Future<void> updateMatch({
+    required String id,
+    required DateTime date,
+    String? location,
+  }) async {
+    await _client.from('matches').update({
+      'date': date.toIso8601String(),
+      'location': location,
+    }).eq('id', id);
+  }
+
+  Future<void> deleteMatch(String id) async {
+    await _client.from('matches').delete().eq('id', id);
+  }
 }

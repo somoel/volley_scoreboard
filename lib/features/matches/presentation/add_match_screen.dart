@@ -3,7 +3,12 @@ import 'package:volley_scoreboard/utils/date_utils.dart';
 import '../data/match_service.dart';
 
 class AddMatchScreen extends StatefulWidget {
-  const AddMatchScreen({super.key});
+  final String? matchId;
+  final DateTime? initialDate;
+  final String? initialLocation;
+
+
+  const AddMatchScreen({super.key, this.matchId, this.initialDate, this.initialLocation});
 
   @override
   State<AddMatchScreen> createState() => _AddMatchScreenState();
@@ -18,12 +23,22 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
 
   Future<void> _saveMatch() async {
     if (_formKey.currentState?.validate() ?? false) {
-      await _service.addMatch(
-        date: _selectedDate,
-        location: _locationController.text.isEmpty
-            ? null
-            : _locationController.text,
-      );
+      if (widget.matchId != null) {
+        await _service.updateMatch(
+          id: widget.matchId!,
+          date: _selectedDate,
+          location: _locationController.text.isEmpty
+              ? null
+              : _locationController.text,
+        );
+      } else {
+        await _service.addMatch(
+          date: _selectedDate,
+          location: _locationController.text.isEmpty
+              ? null
+              : _locationController.text,
+        );
+      }
       if (mounted) {
         Navigator.pop(context, true);
       }
@@ -42,6 +57,18 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
         _selectedDate = picked;
         _dateController.text = DateUtilsES.fullDate.format(picked);
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialDate != null) {
+      _selectedDate = widget.initialDate!;
+      _dateController.text = DateUtilsES.fullDate.format(widget.initialDate!);
+    }
+    if (widget.initialLocation != null) {
+      _locationController.text = widget.initialLocation!;
     }
   }
 
