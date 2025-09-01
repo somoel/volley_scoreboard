@@ -60,6 +60,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                             matchId: match.id,
                             initialDate: match.date,
                             initialLocation: match.location,
+                            isEdit: true,
                           ),
                         ),
                       );

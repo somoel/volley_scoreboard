@@ -6,9 +6,16 @@ class AddMatchScreen extends StatefulWidget {
   final String? matchId;
   final DateTime? initialDate;
   final String? initialLocation;
+    final bool? isEdit;
 
 
-  const AddMatchScreen({super.key, this.matchId, this.initialDate, this.initialLocation});
+  const AddMatchScreen({
+    super.key,
+    this.matchId,
+    this.initialDate,
+    this.initialLocation,
+    this.isEdit,
+  });
 
   @override
   State<AddMatchScreen> createState() => _AddMatchScreenState();
@@ -20,6 +27,7 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
   final _dateController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   final _service = MatchService();
+  String _title = "Agregar partido";
 
   Future<void> _saveMatch() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -70,13 +78,16 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
     if (widget.initialLocation != null) {
       _locationController.text = widget.initialLocation!;
     }
+    if (widget.isEdit ?? false) {
+      _title = "Editar partido";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar partido'),
+        title: Text(_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
