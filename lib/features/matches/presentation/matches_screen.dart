@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:volley_scoreboard/utils/date_utils.dart';
+import 'add_match_screen.dart';
 import '../data/match_model.dart';
 import '../data/match_service.dart';
 
@@ -45,16 +47,27 @@ class _MatchesScreenState extends State<MatchesScreen> {
               final match = matches[index];
               return ListTile(
                 title: Text(
-                    'Partido el ${match.date
-                        .toLocal()
-                        .toString()
-                        .split(' ')[0]}'
+                    'Partido el ${DateUtilsES.fullDate.format(match.date)}'
                 ),
                 subtitle: Text(match.location ?? 'Ubicación desconocida'),
               );
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final added = await Navigator.push(
+              context,
+            MaterialPageRoute(builder: (_) => const AddMatchScreen()),
+          );
+          if (added ?? false) {
+            setState(() {
+              matchesFuture = service.fetchMatches();
+            });
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

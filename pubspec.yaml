@@ -30,6 +30,9 @@ environment:
 dependencies:
   supabase_flutter: ^2.0.0
   flutter_dotenv: ^5.0.2
+  intl: ^0.20.2
+  flutter_localizations:
+    sdk: flutter
   flutter:
     sdk: flutter
 
