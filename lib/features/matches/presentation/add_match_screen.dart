@@ -127,9 +127,6 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
             onPressed: _saveMatch,
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary, // botón primario
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
             ),
             child: const Text(
               'Guardar',
